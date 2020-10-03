@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package io.mavenparser.mavenparser;
+
+option java_multiple_files = true;
+
+service MavenParseService {
+  rpc Parse (ParseRequest) returns (ParseResponse) {}
+}
+
+message ParseRequest {
+  string data = 1;
+}
+
+message ParseResponse {
+  repeated Project projects = 2;
+}
+
+message Project {
+  string name = 1;
+  repeated string libraries = 2;
+}
