@@ -9,6 +9,7 @@ class ProjectTypeState(private val stateManager: StateManager) : State {
             println("ProjectType -> Project")
             stateManager.updateCurrentProject(project)
             stateManager.changeState(ProjectState(stateManager))
+            return
         }
 
         val library = extractLibrary(line)
@@ -16,12 +17,14 @@ class ProjectTypeState(private val stateManager: StateManager) : State {
             println("ProjectType -> Library")
             stateManager.addLibraryToCurrentProject(library)
             stateManager.changeState(LibraryState(stateManager))
+            return
         }
 
         val buildStatus = extractBuildStatus(line)
         if (buildStatus != null) {
             println("ProjectType -> End")
             stateManager.changeState(EndState(stateManager))
+            return
         }
     }
 }

@@ -9,6 +9,7 @@ class ProjectState(private val stateManager: StateManager) : State {
         if (project != null) {
             println("Project -> Project")
             stateManager.updateCurrentProject(project)
+            return
         }
 
         val projectType = extractProjectType(line)
@@ -16,12 +17,14 @@ class ProjectState(private val stateManager: StateManager) : State {
             println("Project -> ProjectType")
             stateManager.updateCurrentProjectType(projectType)
             stateManager.changeState(ProjectTypeState(stateManager))
+            return
         }
 
         val buildStatus = extractBuildStatus(line)
         if (buildStatus != null) {
             println("Project -> End")
             stateManager.changeState(EndState(stateManager))
+            return
         }
     }
 }
