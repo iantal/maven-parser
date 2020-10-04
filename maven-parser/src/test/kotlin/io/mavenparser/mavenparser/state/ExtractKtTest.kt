@@ -1,11 +1,13 @@
 package io.mavenparser.mavenparser.state
 
+import io.mavenparser.mavenparser.core.BuildStatus
 import io.mavenparser.mavenparser.core.Library
 import io.mavenparser.mavenparser.core.LibraryType
 import io.mavenparser.mavenparser.core.Project
 import io.mavenparser.mavenparser.core.ProjectType
 import io.mavenparser.mavenparser.core.Scope
 import org.assertj.core.api.Assertions
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
@@ -48,6 +50,17 @@ internal class ExtractKtTest {
         Assertions.assertThat(actualResult?.name).isEqualTo(name)
         Assertions.assertThat(actualResult?.type).isEqualTo(type)
         Assertions.assertThat(actualResult?.scope).isEqualTo(scope)
+    }
+
+    @Test
+    fun extractBuildState() {
+        val success = extractBuildStatus("[INFO] BUILD SUCCESS")
+        val failure = extractBuildStatus("[INFO] BUILD FAILURE")
+        val unknown = extractBuildStatus("[INFO] BUILD ...")
+
+        Assertions.assertThat(success).isEqualTo(BuildStatus.SUCCESS)
+        Assertions.assertThat(failure).isEqualTo(BuildStatus.FAILURE)
+        Assertions.assertThat(unknown).isEqualTo(null)
     }
 
     private companion object {

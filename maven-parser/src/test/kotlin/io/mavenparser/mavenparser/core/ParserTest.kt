@@ -1,16 +1,19 @@
 package io.mavenparser.mavenparser.core
 
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 internal class ParserTest {
+    @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+    fun readFile(fileName: String): String {
+        return this::class.java.classLoader.getResource(fileName).readText()
+    }
+
     @Test
-    fun addProject() {
-        val parser = Parser("")
-        assertEquals(0, parser.extractedData.size)
-        parser.addProject(Project("a"))
-        parser.addProject(Project("b"))
-        parser.addProject(Project("a"))
-        assertEquals(2, parser.extractedData.size)
+    fun parse() {
+        val data = readFile("zookeeper.txt")
+        val parser = Parser(StateManager())
+        val extractedData = parser.parse(data)
+
+        extractedData.forEach { println(it) }
     }
 }

@@ -11,6 +11,12 @@ enum class ProjectType {
     UNKNOWN
 }
 
+enum class BuildStatus {
+    FAILURE,
+    SUCCESS,
+    UNKNOWN
+}
+
 enum class Scope {
     COMPILE,
     PROVIDED,
@@ -21,9 +27,7 @@ enum class Scope {
     UNKNOWN
 }
 
-data class Project(var name: String) {
-    private val libraries = mutableListOf<Library>()
-
+data class Project(var name: String, var type: ProjectType? = ProjectType.UNKNOWN, val libraries: MutableList<Library> = mutableListOf()) {
     fun addLibrary(library: Library) {
         libraries.add(library)
     }

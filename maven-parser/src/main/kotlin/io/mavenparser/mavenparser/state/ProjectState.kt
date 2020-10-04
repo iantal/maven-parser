@@ -1,23 +1,27 @@
 package io.mavenparser.mavenparser.state
 
-import io.mavenparser.mavenparser.core.Parser
-import io.mavenparser.mavenparser.core.Project
+import io.mavenparser.mavenparser.core.StateManager
 
-class ProjectState(val parser: Parser) : State {
+class ProjectState(private val stateManager: StateManager) : State {
 
     override fun updateData(line: String) {
         val project = extractProject(line)
         if (project != null) {
-            parser.addProject(project)
-            parser.currentProject = project
-            parser.changeState(ProjectTypeState(parser))
-            return
+            println("Project -> Project")
+            stateManager.updateCurrentProject(project)
         }
 
+        val projectType = extractProjectType(line)
+        if (projectType != null) {
+            println("Project -> ProjectType")
+            stateManager.updateCurrentProjectType(projectType)
+            stateManager.changeState(ProjectTypeState(stateManager))
+        }
 
-    }
-
-    override fun getData(): MutableSet<Project?> {
-        return mutableSetOf()
+        val buildStatus = extractBuildStatus(line)
+        if (buildStatus != null) {
+            println("Project -> End")
+            stateManager.changeState(EndState(stateManager))
+        }
     }
 }

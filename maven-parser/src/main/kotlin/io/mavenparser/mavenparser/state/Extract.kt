@@ -1,5 +1,6 @@
 package io.mavenparser.mavenparser.state
 
+import io.mavenparser.mavenparser.core.BuildStatus
 import io.mavenparser.mavenparser.core.Library
 import io.mavenparser.mavenparser.core.Project
 import io.mavenparser.mavenparser.core.ProjectType
@@ -33,4 +34,17 @@ fun extractLibrary(line: String): Library? {
     return libraryPattern.matchEntire(line)
             ?.destructured
             ?.let { (groupAndArtifact, version, libraryScope) -> Library(groupAndArtifact + version, isTransitive(line), libraryScope) }
+}
+
+fun extractBuildStatus(line: String) : BuildStatus? {
+    val buildPattern = "\\[INFO\\]\\sBUILD\\s(SUCCESS|FAILURE).*".toRegex()
+    return buildPattern.matchEntire(line)
+            ?.destructured
+            ?.let { build ->
+                when (build.component1()) {
+                    "SUCCESS" -> BuildStatus.SUCCESS
+                    "FAILURE" -> BuildStatus.FAILURE
+                    else -> BuildStatus.UNKNOWN
+                }
+            }
 }

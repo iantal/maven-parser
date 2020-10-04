@@ -1,13 +1,9 @@
 package io.mavenparser.mavenparser.state
 
-import io.mavenparser.mavenparser.core.Project
+import io.mavenparser.mavenparser.core.StateManager
 
-class EndState : State {
+class EndState(val stateManager: StateManager) : State {
     override fun updateData(line: String) {
-        TODO("Not yet implemented")
-    }
-
-    override fun getData(): MutableSet<Project?> {
-        TODO("Not yet implemented")
+        stateManager.updateCurrentProject(null)
     }
 }
