@@ -1,20 +1,9 @@
 package io.mavenparser.mavenparser.core
 
-import io.mavenparser.mavenparser.state.ProjectState
-import io.mavenparser.mavenparser.state.State
-
-
-class Parser(val data: String) {
-    val extractedData = mutableSetOf<Project?>()
-    var currentProject : Project? = null
-    var state: State = ProjectState(this)
-
-    fun addProject(project: Project?) {
-        extractedData.add(project)
+class Parser(var stateManager: StateManager) {
+    fun parse(data: String) : MutableSet<Project?> {
+        val lines: List<String> = data.split("\n");
+        lines.forEach { line -> stateManager.updateData(line) }
+        return stateManager.extractedData
     }
-
-    fun changeState(state: State) {
-        this.state = state
-    }
-
 }
