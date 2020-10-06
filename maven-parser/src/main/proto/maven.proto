@@ -18,5 +18,11 @@ message ParseResponse {
 
 message Project {
   string name = 1;
-  repeated string libraries = 2;
+  repeated Library libraries = 2;
+}
+
+message Library {
+  string name = 1;
+  string type = 2;
+  string scope = 3;
 }

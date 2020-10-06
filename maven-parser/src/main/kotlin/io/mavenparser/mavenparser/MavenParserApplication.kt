@@ -5,23 +5,26 @@ import io.grpc.ServerBuilder
 import io.mavenparser.mavenparser.grpc.ParseService
 import kotlinx.coroutines.runBlocking
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import java.util.logging.Logger
 
 @SpringBootApplication
 class MavenParserApplication
 
 fun main(args: Array<String>) = runBlocking {
-	val server: Server = ServerBuilder
-			.forPort(Constants.port)
-			.addService(ParseService())
-			.build()
-	Runtime.getRuntime().addShutdownHook(
+    val log = Logger.getLogger(this::class.java.simpleName)
+
+    val server: Server = ServerBuilder
+            .forPort(Constants.port)
+            .addService(ParseService())
+            .build()
+    Runtime.getRuntime().addShutdownHook(
 			Thread {
-				println("*** shutting down gRPC server since JVM is shutting down")
+				log.info("Shutting down gRPC server since JVM is shutting down")
 				server.shutdown()
 			}
 	)
-	println("Server started, listening on ${Constants.port}")
+    log.info("Server started, listening on ${Constants.port}")
 
-	server.start()
-	server.awaitTermination()
+    server.start()
+    server.awaitTermination()
 }
