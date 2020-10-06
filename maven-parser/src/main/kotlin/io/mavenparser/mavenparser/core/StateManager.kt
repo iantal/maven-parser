@@ -2,9 +2,11 @@ package io.mavenparser.mavenparser.core
 
 import io.mavenparser.mavenparser.state.ProjectState
 import io.mavenparser.mavenparser.state.State
+import java.time.Instant
 
 
 class StateManager {
+    val start = Instant.now().toEpochMilli()
     val extractedData = mutableSetOf<Project?>()
     private var currentProject: Project? = null
     private var state: State = ProjectState(this)

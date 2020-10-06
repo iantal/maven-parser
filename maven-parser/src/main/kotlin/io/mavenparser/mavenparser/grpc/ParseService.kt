@@ -1,6 +1,5 @@
 package io.mavenparser.mavenparser.grpc
 
-import com.google.common.io.BaseEncoding.base64
 import io.mavenparser.mavenparser.Library
 import io.mavenparser.mavenparser.MavenParseServiceGrpcKt
 import io.mavenparser.mavenparser.ParseRequest
@@ -8,17 +7,17 @@ import io.mavenparser.mavenparser.ParseResponse
 import io.mavenparser.mavenparser.Project
 import io.mavenparser.mavenparser.core.Parser
 import io.mavenparser.mavenparser.core.StateManager
-import java.lang.Byte.decode
-import java.nio.charset.StandardCharsets
 import java.util.*
+import java.util.logging.Logger
 
 
 class ParseService : MavenParseServiceGrpcKt.MavenParseServiceCoroutineImplBase() {
+    val log: Logger = Logger.getLogger(this::class.java.simpleName)
+
     override suspend fun parse(request: ParseRequest): ParseResponse {
-        println("received maven parse request for ${request.data}")
+        log.info("Received maven parse request")
 
         val decodedData = decodeBase64(request.data)
-
         val parser = Parser(StateManager())
         val parsedData = parser.parse(decodedData)
 
@@ -43,11 +42,9 @@ class ParseService : MavenParseServiceGrpcKt.MavenParseServiceCoroutineImplBase(
                 .build()
     }
 
-    fun decodeBase64(data: String) : String{
+    private fun decodeBase64(data: String) : String{
         val decoder = Base64.getDecoder()
         val decoded = decoder.decode(data)
-        val decodedStr = String(decoded, Charsets.UTF_8)
-        println(decodedStr)
-        return decodedStr
+        return String(decoded, Charsets.UTF_8)
     }
 }

@@ -6,7 +6,6 @@ class ProjectTypeState(private val stateManager: StateManager) : State {
     override fun updateData(line: String) {
         val project = extractProject(line)
         if (project != null) {
-            println("ProjectType -> Project")
             stateManager.updateCurrentProject(project)
             stateManager.changeState(ProjectState(stateManager))
             return
@@ -14,7 +13,6 @@ class ProjectTypeState(private val stateManager: StateManager) : State {
 
         val library = extractLibrary(line)
         if (library != null) {
-            println("ProjectType -> Library")
             stateManager.addLibraryToCurrentProject(library)
             stateManager.changeState(LibraryState(stateManager))
             return
@@ -22,7 +20,6 @@ class ProjectTypeState(private val stateManager: StateManager) : State {
 
         val buildStatus = extractBuildStatus(line)
         if (buildStatus != null) {
-            println("ProjectType -> End")
             stateManager.changeState(EndState(stateManager))
             return
         }
