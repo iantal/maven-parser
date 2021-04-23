@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mp-service
+spec:
+  selector:
+    app: mp
+  ports:
+    - protocol: TCP
+      port: 4000
+      targetPort: 4000

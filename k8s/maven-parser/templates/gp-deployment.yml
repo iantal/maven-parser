@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mp-deployment
+  labels:
+    app: mp
+spec:
+  selector:
+    matchLabels:
+      app: mp
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mp
+    spec:
+      imagePullSecrets:
+        - name: dockerregistrykey
+      containers:
+        - name: mp
+          image: {{ .Values.registry }}:{{ .Values.tag }}
+          imagePullPolicy: "Always"
+          ports:
+            - containerPort: 4000
